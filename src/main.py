@@ -57,6 +57,29 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+
+#Here is the LOGIN route--------------------------------------------------------------------------
+@app.route('/login', methods=['POST'])
+def login():
+    body = request.get_json()
+    email = body['email']
+    password = body['password']
+
+    user = User.query.filter_by(email=email).first()
+
+    if user is None:
+        raise APIException("usuario no existe", status_code=401)
+    
+#validating user
+    if not bcrypt.check_password_hash(user.password, password):
+        raise APIException("usuario o password no coinciden", status_code=401)
+
+    access_token = create_access_token(identity= user.id)
+    return jsonify({"token": access_token})
+
+
+#Here is the LOGOUT route------------------------------------------------------------------------
+
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
