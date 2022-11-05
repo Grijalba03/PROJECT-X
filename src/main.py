@@ -31,7 +31,7 @@ CORS(app)
 setup_admin(app)
 
 #####  Importar Modelos  ####
-from src.modelos import User 
+from src.modelos import User
 
 ##### Importar las Rutas ####
 from src.rutas import signup
@@ -48,37 +48,6 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
-
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
-
-    return jsonify(response_body), 200
-
-
-#Here is the LOGIN route--------------------------------------------------------------------------
-@app.route('/login', methods=['POST'])
-def login():
-    body = request.get_json()
-    email = body['email']
-    password = body['password']
-
-    user = User.query.filter_by(email=email).first()
-
-    if user is None:
-        raise APIException("usuario no existe", status_code=401)
-    
-#validating user
-    if not bcrypt.check_password_hash(user.password, password):
-        raise APIException("usuario o password no coinciden", status_code=401)
-
-    access_token = create_access_token(identity= user.id)
-    return jsonify({"token": access_token})
-
-
-#Here is the LOGOUT route------------------------------------------------------------------------
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
