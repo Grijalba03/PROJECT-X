@@ -1,9 +1,9 @@
 import os
 from ..main import request, jsonify, app, bcrypt, jwt_required, create_access_token, get_jwt_identity
 from ..db import db
-from ..modelos import User
+from ..modelos import User, BlockedList
 from flask import Flask, url_for
-from datetime import datetime
+from datetime import datetime, date, time, timezone
 import json
 
 @app.route('/signup' , methods=['POST'])
@@ -22,7 +22,7 @@ def signup():
         password = bcrypt.generate_password_hash(body['password'], 10).decode("utf-8")
 
         new_user = User(email=body['email'], password=password, is_active=True)
-        user = User.query.filter_by(email=body['email']).first()
+        user = User.query.filter_by(email=body['email']) #.first()
         # users = User.query.all()
         # users = list(map( lambda user: user.serialize(), users))
 
@@ -108,7 +108,7 @@ def profile():
 
     Blocked = BlockedList.query.filter_by(token=jti).first()
     #cuando hay coincidencia Bloked es instancia de la clase BlockedList
-    #cuando No hay coincidencia tokenBlocked = None
+    #cuando No hay coincidencia Blocked = None
 
     if isinstance(Blocked, BlockedList):
         return jsonify(msg="Acceso Denegado")

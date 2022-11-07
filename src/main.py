@@ -31,11 +31,13 @@ CORS(app)
 setup_admin(app)
 
 #####  Importar Modelos  ####
-from src.modelos import User
+from src.modelos import User, BlockedList, Person, Favorite_Person, Planet, Favorite_Planet, Vehicle, Favorite_Vehicle
 
 ##### Importar las Rutas ####
-from src.rutas import signup
-
+from src.rutas import signup, login, logout, user_suspended, profile
+from src.rutas import get_person, get_person_by_id, create_new_person, delete_person_by_id, delete_favorite_person_by_id
+from src.rutas import get_planet, get_planet_by_id, create_new_planet, delete_planet_by_id, delete_favorite_planet_by_id
+from src.rutas import get_vehicle, get_vehicle_by_id, create_new_vehicle, delete_vehicle_by_id, delete_favorite_vehicle_by_id
 
 
 # Handle/serialize errors like a JSON object
